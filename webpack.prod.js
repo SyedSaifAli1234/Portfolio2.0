@@ -4,7 +4,7 @@ const { merge } = require("webpack-merge");
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = merge(common, {
@@ -15,7 +15,7 @@ module.exports = merge(common, {
   },
   optimization: {
     minimizer: [
-      new OptimizeCssAssetsPlugin(),
+      new CssMinimizerPlugin(),
       new TerserPlugin(),
       new HtmlWebpackPlugin({
         template: "./src/template.html",
@@ -32,6 +32,17 @@ module.exports = merge(common, {
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
+    }),
+    new HtmlWebpackPlugin({
+      template: "./src/privacy-policy.html",
+      filename: "privacy-policy.html",
+      favicon: "./src/assets/favicon.png",
+      inject: false,
+      minify: {
+        removeAttributeQuotes: true,
+        collapseWhitespace: true,
+        removeComments: true,
+      },
     }),
   ],
   module: {
